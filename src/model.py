@@ -285,7 +285,8 @@ class ResModel(nn.Module):
         mp, pl = torch.max(prob.detach(), dim=1)
         mask = mp.ge(0.95).float()
         if feature_memory.num_classes == 65 or step > 50000:
-            neg_pl = self.generate_pseudo_labels(pl, level_choose_num=16, num_classes=feature_memory.num_classes)
+            level_choose_num = 16 if feature_memory.num_classes == 65 else 36
+            neg_pl = self.generate_pseudo_labels(pl, level_choose_num=level_choose_num, num_classes=feature_memory.num_classes)
             pl_loss = self.nl(out1, neg_pl)
         else:
             pl_loss = (F.cross_entropy(out1, pl, reduction="none") * mask).mean()
