@@ -1,26 +1,10 @@
 # A multi-view consistency framework with semi-supervised domain adaptation
 
-The official Pytorch implementation of "A multi-view consistency framework with semi-supervised domain adaptation" accepted to *Engineering Applications of Artificial Intelligence*.
+The official Pytorch implementation of "A multi-view consistency framework with semi-supervised domain adaptation" accepted by *Engineering Applications of Artificial Intelligence*.
 
 ## Introduction
 
 Semi-Supervised Domain Adaptation (SSDA) leverages knowledge from a fully labeled source domain to classify data in a partially labeled target domain. Due to the limited number of labeled samples in the target domain, there can be intrinsic similarity of classes in the feature space, which may result in biased predictions, even when the model is trained on a balanced dataset. To overcome this limitation, we introduce a multi-view consistency framework, which includes two views for training strongly augmented data. One is a debiasing strategy for correcting class-wise prediction probabilities according to the prediction performance of the model. The other involves leveraging pseudo-negative labels derived from the model predictions. Furthermore, we introduce a cross-domain affinity learning aimed at aligning features of the same class across different domains, thereby enhancing overall performance. Experimental results demonstrate that our method outperforms the competing methods on two standard domain adaptation datasets, DomainNet and Office–Home. Combining unsupervised domain adaptation and semi-supervised learning offers indispensable contributions to the industrial sector by enhancing model adaptability, reducing annotation costs, and improving performance.
-
-## Setting up Python Environment
-
-Use conda to create a new environment by running the following command:
-
-```sh
-conda create --name <env_name> python=3.10.10 --file requirements.txt
-```
-
-Replace <env_name> with the desired name of your new environment. This command will create a new environment with Python version 3.10.10 and install all the required packages specified in the requirements.txt file.
-
-### Compatible PyTorch version
-
-The requirements file specifies PyTorch version 2.0. Emprically it has shown to speed up the training progress.
-
-However, the code does not use any PyTorch 2.0 features and should be compatible with older versions of PyTorch, such as version 1.12.0.
 
 ## Data Preparation
 
