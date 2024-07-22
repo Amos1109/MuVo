@@ -1,0 +1,35 @@
+dataset_dir: D:/2023/data
+text_url: https://raw.githubusercontent.com/VisionLearningGroup/SSDA_MME/master/data/txt/
+dataset_cfg:
+    OfficeHome:
+        name: OfficeHome
+        path: D:/2023/data/OfficeHome
+        text_path: D:/2023/data/OfficeHome/text
+        num_classes: 65
+        url: https://wjdcloud.blob.core.windows.net/dataset/OfficeHome.zip
+        domains:
+            - Art
+            - Clipart
+            - Product
+            - Real
+    DomainNet:
+        name: DomainNet
+        path: D:/2023/data/DomainNet
+        text_path: D:/2023/data/DomainNet/text
+        num_classes: 126
+        url: http://csr.bu.edu/ftp/visda/2019/multi-source
+        domains:
+            - clipart
+            - painting
+            - real
+            - sketch
+    Office31:
+        name: Office31
+        path: D:/2023/data/Office31
+        text_path: D:/2023/data/Office31/text
+        num_classes: 31
+        url: test
+        domains:
+            - amazon
+            - dslr
+            - webcam
