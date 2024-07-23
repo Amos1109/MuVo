@@ -22,7 +22,7 @@ target:
     default: 1
 seed:
     type: int
-    default: 19980802
+    default: 846498
 bsize:
     type: int
     default: 24
