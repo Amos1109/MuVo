@@ -55,12 +55,6 @@ python data_preparation.py --dataset <DATASET>
 
 Replace <DATASET> with the name of the dataset you want to prepare (e.g. DomainNet, OfficeHome). This script will download the dataset (if necessary) and extract the text data which specify the way to split training, validation, and test sets. The resulting data will be saved in the format described above.
 
-After running the data preparation script, you should be able to use the resulting data files in this repository.
-
-## Setting up Wandb
-
-We use Wandb to record our experimental results. Check [here](https://wandb.ai) for more details. The code will prompt you to login to your Wandb account.
-
 ## Running the model
 
 To apply our proposed MuVo method, append the prefix"muvo_" to the selected method.  For example:
