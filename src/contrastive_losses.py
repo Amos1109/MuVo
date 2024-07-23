@@ -1,34 +1,6 @@
 import numpy as np
 import torch
 import torch.nn.functional as F
-import ot
-from src.simclr import SupervisedConLoss
-#1.5 81.0 #1 80.9
-group_simclr = SupervisedConLoss(temperature=1.5, base_temperature=1.5)
-
-def get_group(feat, label):
-    groups = {}
-    for x, y in zip(label, feat):
-        group = groups.get(x.item(), [])
-        group.append(y)
-        groups[x.item()] = group
-    return groups
-
-def contrastive_source_target(features, class_labels, class_centroid):
-    features = F.normalize(features)
-    class_centroid = F.normalize(class_centroid)
-    grp_unlabeled = get_group(features, class_labels)
-    l_fast = []
-    l_slow = []
-    for key in grp_unlabeled.keys():
-        l_fast.append(torch.stack(grp_unlabeled[key]).mean(dim=0))
-        l_slow.append(class_centroid[key])
-    if len(l_fast) > 0:
-        l_fast = torch.stack(l_fast)
-        l_slow = torch.stack(l_slow)
-        features = torch.cat([l_fast.unsqueeze(1), l_slow.unsqueeze(1).cuda()], dim=1)
-        loss = group_simclr(features)
-    return loss
 
 
 def contrastive_class_to_class_learned_memory( features, class_labels, memory):
@@ -73,9 +45,6 @@ def contrastive_class_to_class_learned_memory( features, class_labels, memory):
 
         if memory_c is not None and features_c.shape[0] > 1 and len(memory.feature_queues[c]) > 1:
 
-            # L2 normalize vectors
-            # memory_c = F.normalize(memory_c, dim=1) # N, 256
-            # features_c_norm = F.normalize(features_c, dim=1) # M, 256
             memory_c = torch.stack(memory_c).cuda()
 
             # compute similarity. All elements with all elements
@@ -91,45 +60,6 @@ def contrastive_class_to_class_learned_memory( features, class_labels, memory):
 
 
 
-def infoNce(query, key, temp=0.3):
-    target_mask_c = torch.diag(torch.ones(query.shape[0])).cuda()
-    # target_mask_c = torch.cat((target_mask_c, target_mask_c), dim=1).cuda()
-    # key = torch.cat((key, query), dim=0)
-    logits = torch.einsum('nc,ck->nk', [query, key.transpose(0, 1)])
-    logits /= temp
-    log_prob = F.normalize(logits.exp(), dim=1, p=1).log()
-    loss = - torch.sum(target_mask_c * log_prob) / target_mask_c.sum()
-    return loss
-
-
-def contrastive_target_source(features, class_labels, class_centroid):
-    loss = 0
-    features = F.normalize(features)
-    grp_unlabeled = get_group(features, class_labels)
-    l_fast = []
-    l_slow = []
-    for key in grp_unlabeled.keys():
-        l_fast.append(torch.stack(grp_unlabeled[key]).mean(dim=0))
-        l_slow.append(class_centroid[key])
-    if len(l_fast) > 0:
-        l_fast = torch.stack(l_fast)
-        l_slow = torch.stack(l_slow)
-        loss = infoNce(l_fast, l_slow)
-        # loss = F.mse_loss(l_fast, l_slow)
-        # features = torch.cat([l_fast.unsqueeze(1), l_slow.unsqueeze(1).cuda()], dim=1)
-        # loss = group_simclr(features)
-
-    return loss
-
-
-def ot_loss(proto_s, feat_tu_w, feat_tu_s, num_classes):
-    bs = feat_tu_s.shape[0]
-    with torch.no_grad():
-        M_st_weak = 1 - pairwise_cosine_sim(proto_s.mo_pro, feat_tu_w)  # postive distance
-    gamma_st_weak = ot_mapping(M_st_weak.data.cpu().numpy().astype(np.float64))
-    score_ot, pred_ot = gamma_st_weak.t().max(dim=1)
-    Lm = center_loss_cls(proto_s.mo_pro, feat_tu_s, pred_ot, num_classes=num_classes)
-    return Lm
 
 
 def pairwise_cosine_sim(a, b):
@@ -140,18 +70,6 @@ def pairwise_cosine_sim(a, b):
     mat = a @ b.t()
     return mat
 
-
-def ot_mapping(M):
-    '''
-    M: (ns, nt)
-    '''
-    reg1 = 1
-    reg2 = 1
-    ns, nt = M.shape
-    a, b = np.ones((ns,)) / ns, np.ones((nt,)) / nt
-    gamma = ot.unbalanced.sinkhorn_stabilized_unbalanced(a, b, M, reg1, reg2)
-    gamma = torch.from_numpy(gamma).cuda()
-    return gamma
 
 
 def center_loss_cls(centers, x, labels, num_classes=65):
