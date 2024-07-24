@@ -34,11 +34,10 @@ def funcget_group_centroid(logits, labels, centroid):
 
 
 class FeatureLabelMemoryBank:
-    def __init__(self, dataset, num_classes=65, max_features_per_class=512, feature_dim=512, warmup=5000):
+    def __init__(self, dataset, num_classes=65, max_features_per_class=512, feature_dim=512):
         self.num_classes = num_classes
         self.max_features_per_class = max_features_per_class
         self.feature_dim = feature_dim
-        self.warmup = warmup
         self.proto_s = Prototype(dataset=dataset['name'], C=num_classes, dim=512)
         # 为每个类别创建一个队列
         self.feature_queues = {label: deque(maxlen=max_features_per_class) for label in range(num_classes)}

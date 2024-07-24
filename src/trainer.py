@@ -40,7 +40,7 @@ class BaseDATrainer:
         # required arguments for DATrainer
         self.config = BaseTrainerConfig.from_args(args)
         # officehome 64 domainnet512
-        self.max_features_per_class = 64 if args.dataset == 'OfficeHome' else 512
+        self.max_features_per_class = 64 if args.dataset['name'] == 'OfficeHome' else 512
         self.feature_memory = FeatureLabelMemoryBank(dataset=args.dataset, num_classes=args.dataset["num_classes"], max_features_per_class=self.max_features_per_class, feature_dim=512)
 
     def get_source_loss(self, step, *data):
