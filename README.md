@@ -63,7 +63,7 @@ To apply our proposed MuVo method, append the prefix"muvo_" to the selected meth
 python main.py --method muvo_SLA --dataset OfficeHome --source 2 --target 3 --seed 846498 --num_iters 20000 --shot 3shot --alpha 0.3 --update_interval 500 --warmup 2000 --T 0.6
 ```
 
-This command runs the MuVo + SLA model on the 3-shot C -> S OfficeHome dataset, with the specified hyperparameters. 
+This command runs the MuVo + SLA model on the 3-shot P -> R OfficeHome dataset, with the specified hyperparameters. 
 
 ## Citation
 
