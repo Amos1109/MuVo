@@ -60,10 +60,10 @@ Replace <DATASET> with the name of the dataset you want to prepare (e.g. DomainN
 To apply our proposed MuVo method, append the prefix"muvo_" to the selected method.  For example:
 
 ```sh
-python main.py --method muvo_SLA --dataset DomainNet --source 0 --target 3 --seed 991109 --num_iters 100000 --shot 3shot --alpha 0.3 --update_interval 500 --warmup 50000 --T 0.6
+python main.py --method muvo_SLA --dataset OfficeHome --source 2 --target 3 --seed 846498 --num_iters 20000 --shot 3shot --alpha 0.3 --update_interval 500 --warmup 2000 --T 0.6
 ```
 
-This command runs the MuVo+ SLA model on the 3-shot C -> S DomainNet dataset, with the specified hyperparameters. 
+This command runs the MuVo + SLA model on the 3-shot C -> S OfficeHome dataset, with the specified hyperparameters. 
 
 ## Citation
 
